@@ -30,10 +30,10 @@ var game = {
     imageElem: $("#view-image"),
     answerElem: $("#view-answers"),
 
-    
+
     time: 121,          // Start the game with a 2 minute timer
     score: 0,           // We start the game with a score of 0.
-    
+
     questionIndex: 0,   // Variable to hold the index of current question.
 
     // ==============================================================================
@@ -92,7 +92,8 @@ var game = {
         // and existing intervals from becoming orphaned
         this.playBtnElem.hide();
 
-
+        // should this be in new game?
+        // newGame should be called before play?
         clearInterval(interval);
         // set up an interval that counts down every second
         interval = setInterval(game.countDown, 1000);
@@ -119,24 +120,66 @@ var game = {
     // Randomly Choose a Question from game.quiz.questions
     // ==============================================================================
     chooseQuestion: function () {
-        var x = this.quiz.questions[Math.floor(Math.random() * this.quiz.questions.length)];
-        if (DEBUG) {
-            console.log("x question within chooseQuestion: ");
-            console.log(x);
-        }
-        return x;
+        return this.quiz.questions[Math.floor(Math.random() * this.quiz.questions.length)];
     },
 
     // Function to render questions.
     askQuestion: function (q) {
 
         if (DEBUG) console.log("Inside askQuestion");
+
         var elemContent = this.quiz.question + "?";
-        this.display($("#view-question"), elemContent);
+        this.display(this.questionElem.empty(), elemContent);
         if (DEBUG) console.log(q.src);
-        this.displayImg($("#view-image"), q.src, "quizImg");
+        this.displayImg(this.imageElem, q.src, "quizImg");
         var answer = q.answer;
-        return answer;
+
+        // ====================================================
+
+        var options = []; //an array of 3 possible answers
+
+        var option1 = this.chooseAnswerOption(q, options);
+        options.push(option1["answer"]);
+        if (DEBUG) console.log("ANSWER 1: " + option1["answer"]);
+        var option2 = this.chooseAnswerOption(q, options);
+        options.push(option2["answer"]);
+        if (DEBUG) console.log("ANSWER 2: " + option2["answer"]);
+        if (DEBUG) console.log(options);
+
+        //Add the actual answer to a random spot in the array
+        options.splice( Math.floor( ( Math.random() * options.length+1 ) ), 0, answer );
+        
+
+        if (DEBUG) console.log("OPTIONS");
+        if (DEBUG) console.log(options);
+
+        options.forEach( function (name) {
+            var button = document.createElement("button");
+            button.value = name;
+            button.textContent = name;
+//@todo why isn't the this.answerElem working?
+            $("#view-answers").append(button);
+        });
+
+    },
+
+    chooseAnswerOption: function(currentQ, options) {
+
+        var option = this.quiz.questions[Math.floor( Math.random() * this.quiz.questions.length )];
+        if (DEBUG) console.log("currentQ.answer " + currentQ.answer);
+        if (DEBUG) console.log("option.answer " + option.answer);
+        if (DEBUG) console.log("options.indexOf(options['answer'] " + options.indexOf(options["answer"]));
+        
+        //Stop a wrong answer from repeating within the answer choices array
+        if(option.answer === currentQ.answer) {
+            if (DEBUG) console.log( option.answer );
+            return this.chooseAnswerOption(currentQ, options);
+        }
+        if (options.indexOf(options["answer"]) !== -1) {
+             return this.chooseAnswerOption(currentQ, options);
+         }
+
+        return option;
     },
 
     evaluateAnswer: function (answer) {
@@ -184,7 +227,7 @@ var game = {
     },
 
     // Function that updates the score...
-    updateScore: function() {
+    updateScore: function () {
         this.scoreElem.html("Score: " + this.score);
     },
 
@@ -209,6 +252,8 @@ $("#start-btn").on("click", function () {
     // this is called every second and decreases the time
     game.play();
 });
+
+//game.newGame();
 
 
 
