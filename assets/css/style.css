@@ -17,4 +17,9 @@ button {
     width: 300px;
     padding: 10px;
     margin: 10px auto;
-  }
+}
+
+.quizImg {
+    max-height: 400px;
+    max-width: 400px;
+}
