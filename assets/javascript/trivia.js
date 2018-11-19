@@ -1,6 +1,6 @@
 // VARIABLES
 // ==============================================================================
-var DEBUG = true;
+var DEBUG = false;
 
 
 // ==============================================================================
@@ -33,7 +33,7 @@ var game = {
 
     time: 121,          // Start the game with a 2 minute timer
     score: 0,           // We start the game with a score of 0.
-
+    currentQuestion: '',
     questionIndex: 0,   // Variable to hold the index of current question.
 
     // ==============================================================================
@@ -44,11 +44,16 @@ var game = {
         "description": "Do you know these famous landmarks?",
         "question": "What is the name of this landmark?",
         "questions": [
-            { "src": "assets/images/statue-of-liberty.jpg", "answer": "Statue of Liberty", "photo credit:": "Yvan Musy" },
-            { "src": "assets/images/eiffel-tower.jpg", "answer": "Eiffel Tower", "photo credit:": "Anthony Delanoix" },
-            { "src": "assets/images/gherkin.jpg", "answer": "Gherkin", "photo credit": "Ed Robertson" },
-            { "src": "assets/images/taj-mahal.jpg", "answer": "Taj Mahal", "photo credit": "Fahrul Azmi" },
-            { "src": "assets/images/st-basils-cathedral.jpg", "answer": "St. Basil's Cathedral", "photo credit": "Nikolay Vorobyev" }
+            { "src": "assets/images/statue-of-liberty.jpg", "answer": "Statue of Liberty", "photo credit:": "Yvan Musy", "asked": false },
+            { "src": "assets/images/eiffel-tower.jpg", "answer": "Eiffel Tower", "photo credit:": "Anthony Delanoix", "asked": false },
+            { "src": "assets/images/gherkin.jpg", "answer": "Gherkin", "photo credit": "Ed Robertson", "asked": false },
+            { "src": "assets/images/taj-mahal.jpg", "answer": "Taj Mahal", "photo credit": "Fahrul Azmi", "asked": false },
+            { "src": "assets/images/st-basils-cathedral.jpg", "answer": "St. Basil's Cathedral", "photo credit": "Nikolay Vorobyev", "asked": false },
+            { "src": "assets/images/petronas-towers.jpg", "answer": "Petronas Twin Towers", "photo credit:": "Alex Block", "asked": false },
+            { "src": "assets/images/machu-picchu.jpg", "answer": "Machu Picchu", "photo credit:": "Abraham Osorio", "asked": false },
+            { "src": "assets/images/great-wall-china.jpg", "answer": "Great Wall of China", "photo credit": "Violette Filippini", "asked": false },
+            { "src": "assets/images/pyramids.jpg", "answer": "Egyptian Pyramids", "photo credit": "Jeremy Bishop", "asked": false },
+            { "src": "assets/images/opera-house.jpg", "answer": "Sydney Opera House", "photo credit": "Holger Link", "asked": false }
         ]
     },
 
@@ -56,8 +61,23 @@ var game = {
     // GAME OBJECT - FUNCTIONS
     // ==============================================================================
     newGame: function () {
-        playBtnElem.show();
+        // remove the start button from view
+        // prevent new intervals from being created 
+        // and existing intervals from becoming orphaned
+        this.playBtnElem.hide();
         //empty all elements so that we can start a new game
+        //reset all the this.quiz.questions.asked flags
+        this.quiz.questions.forEach(function(question) {
+            question.asked = false;
+        });
+        this.score = 0;
+        this.updateScore();
+        //reset timer
+        //@todo make a timer for each question
+        clearInterval(interval);
+        game.time = 121;
+        // set up an interval that counts down every second
+        interval = setInterval(game.countDown, 1000);
     },
 
     //DEBUGGING FUNCTION 
@@ -87,121 +107,131 @@ var game = {
     // ==============================================================================
     play: function () {
         //=================================================//
-        // remove the start button from view
-        // prevent new intervals from being created 
-        // and existing intervals from becoming orphaned
-        this.playBtnElem.hide();
-
-        // should this be in new game?
-        // newGame should be called before play?
-        clearInterval(interval);
-        // set up an interval that counts down every second
-        interval = setInterval(game.countDown, 1000);
-
-        //=================================================//
-        //now pick a question from the question list
-        if (DEBUG) console.log("play() questions.length: " + this.quiz.questions.length);
-        if (DEBUG) console.log("play() this.questionIndex: " + this.questionIndex);
+        this.newGame();
+        this.qCycle();
+    },
 
 
-        // ask first question
-        var aQuestion = this.chooseQuestion();
+    // ==============================================================================
+    qCycle: function () {
 
-        this.askQuestion(aQuestion);
-        if (DEBUG) {
-            console.log("aQuestion returned from chooseQuestions: ");
-            console.log(aQuestion);
+        //get a new question
+        this.currentQuestion = this.chooseQuestion();
+
+        if (this.currentQuestion) {
+
+            if (DEBUG) console.log("CURRENT QUESTION: ", this.currentQuestion);
+
+            //ask the new question
+            this.askQuestion();
+            //switch the question asked flag from false to true;
+            this.currentQuestion.asked = true;
+            //update the score
+            this.updateScore();
+        } else {
+            //@todo this is not working
+            if (DEBUG) console.log(" typeof is undefined");
+            this.gameOver();
         }
 
-        this.updateScore();
     },
 
     // ==============================================================================
     // Randomly Choose a Question from game.quiz.questions
     // ==============================================================================
     chooseQuestion: function () {
-        return this.quiz.questions[Math.floor(Math.random() * this.quiz.questions.length)];
+        //must check to see if question has already been asked and prevent that
+        //var q = this.quiz.questions[Math.floor(Math.random() * this.quiz.questions.length)];
+
+        var questions = this.quiz.questions.filter(function (question) {
+            return question.asked === false;
+        })
+        //if (DEBUG) 
+        console.log("QUESTIONS THAT HAVE NOT BEEN ASKED: " + questions.length);
+        if (questions.length > 0) {
+            var randomIndex = Math.floor((questions.length) * Math.random());
+            return questions[randomIndex];
+        } else {
+            console.log("Game should be over");
+            //no unasked questions left
+            return false;
+        }
+
     },
 
     // Function to render questions.
-    askQuestion: function (q) {
+    askQuestion: function () {
 
         if (DEBUG) console.log("Inside askQuestion");
 
         var elemContent = this.quiz.question + "?";
         this.display(this.questionElem.empty(), elemContent);
-        if (DEBUG) console.log(q.src);
-        this.displayImg(this.imageElem, q.src, "quizImg");
-        var answer = q.answer;
+        console.log(this.currentQuestion);
+        if (DEBUG) console.log(this.currentQuestion.src);
+
+        this.displayImg(this.imageElem, this.currentQuestion.src, "quizImg");
+        var answer = this.currentQuestion.answer;
 
         // ====================================================
 
         var options = []; //an array of 3 possible answers
 
-        var option1 = this.chooseAnswerOption(q, options);
+        var option1 = this.chooseAnswerOption(options);
         options.push(option1["answer"]);
         if (DEBUG) console.log("ANSWER 1: " + option1["answer"]);
-        var option2 = this.chooseAnswerOption(q, options);
+        var option2 = this.chooseAnswerOption(options);
         options.push(option2["answer"]);
         if (DEBUG) console.log("ANSWER 2: " + option2["answer"]);
         if (DEBUG) console.log(options);
 
         //Add the actual answer to a random spot in the array
-        options.splice( Math.floor( ( Math.random() * options.length+1 ) ), 0, answer );
-        
+        options.splice(Math.floor((Math.random() * options.length + 1)), 0, answer);
+
 
         if (DEBUG) console.log("OPTIONS");
         if (DEBUG) console.log(options);
-
-        options.forEach( function (name) {
+        $("#view-answers").empty();
+        options.forEach(function (name) {
             var button = document.createElement("button");
             button.value = name;
             button.textContent = name;
-//@todo why isn't the this.answerElem working?
+            //@todo why isn't the this.answerElem working?
+
             $("#view-answers").append(button);
         });
 
     },
 
-    chooseAnswerOption: function(currentQ, options) {
+    chooseAnswerOption: function (options) {
 
-        var option = this.quiz.questions[Math.floor( Math.random() * this.quiz.questions.length )];
-        if (DEBUG) console.log("currentQ.answer " + currentQ.answer);
+        var option = this.quiz.questions[Math.floor(Math.random() * this.quiz.questions.length)];
+        if (DEBUG) console.log("this.currentQuestion.answer " + this.currentQuestion.answer);
         if (DEBUG) console.log("option.answer " + option.answer);
         if (DEBUG) console.log("options.indexOf(options['answer'] " + options.indexOf(options["answer"]));
-        
         //Stop a wrong answer from repeating within the answer choices array
-        if(option.answer === currentQ.answer) {
-            if (DEBUG) console.log( option.answer );
-            return this.chooseAnswerOption(currentQ, options);
+        //if the selected choice is the same as the answer try again
+        //or if the selected choice is already in the list of answer choices, try again
+        if (option.answer === this.currentQuestion.answer || options.indexOf(option["answer"]) !== -1) {
+            return this.chooseAnswerOption(options);
         }
-        if (options.indexOf(options["answer"]) !== -1) {
-             return this.chooseAnswerOption(currentQ, options);
-         }
 
         return option;
     },
 
-    evaluateAnswer: function (answer) {
-        // Only run this code if "t" or "f" were pressed.
-        if (answer === "t" || answer === "f") {
+    checkAnswer: function () {
 
-            // If they guess the correct answer, increase and update score, alert them they got it right.
-            if (answer === questions[this.questionIndex].a) {
-                this.msgElem.text("Correct!");
-                this.score++;
-                updateScore();
-            }
-            // If wrong, tell them they are wrong.
-            else {
-                this.msgElem.text("Wrong!");
-            }
-
-            // Increment the questionIndex variable and call the renderQuestion function.
-            this.questionIndex++;
-            this.renderQuestion();
-
+        var userAnswer = event.target.value;
+        if (DEBUG) console.log("checkAnswer: " + userAnswer);
+        if (DEBUG) console.log(this.currentQuestion.answer);
+        if (userAnswer === game.currentQuestion.answer) {
+            this.msgElem.text("Correct!", "correct");
+            this.score++;
+            this.updateScore();
+        } else {
+            this.msgElem.text("Wrong!", "wrong");
         }
+
+        this.qCycle();
     },
 
     displayImg: function (elem, elemContent, elemClass) {
@@ -231,28 +261,38 @@ var game = {
         this.scoreElem.html("Score: " + this.score);
     },
 
+    // ==============================================================================
+    // END THE GAME B/C
+    //      ALL Questions have been asked
+    //      OR the TIME is used up
+    // ==============================================================================
     gameOver: function () {
-        //end the game because all of the questions are answered
-        //or because the timer is up
+
         if (DEBUG) console.log("gameOver() called");
         // clear the display
         // remove the event listener from the option buttons
         // stop the countdown interval
-        // stop the countdown interval
         clearInterval(interval);
         // display the score
         // display the start button so player can play again
+        this.playBtnElem.show();
     }
 }
 
-
+// ==============================================================================
+// EVENT LISTENERS FOR 
+//      Starting the Game 
+//      Selecting an Answer
 // ==============================================================================
 $("#start-btn").on("click", function () {
-    if (DEBUG) game.sayHello();
-    // this is called every second and decreases the time
     game.play();
 });
 
+$("#view-answers").on("click", function () {
+    if (DEBUG) game.sayHello();
+    // this is called every second and decreases the time
+    game.checkAnswer();
+});
 //game.newGame();
 
 
