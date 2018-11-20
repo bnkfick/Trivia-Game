@@ -219,7 +219,6 @@ var game = {
             this.answerElem.append(button);
         }
         canClick = true;
-        console.log("canClick " + canClick);
         
     },
 
@@ -265,7 +264,7 @@ var game = {
         this.display(this.msgElem.empty(), msg);
         clearInterval(qinterval);
         canClick = false;
-        console.log("canClick " + canClick);
+
         setTimeout(function () {
             game.resetQTimer();
             game.qCycle();
