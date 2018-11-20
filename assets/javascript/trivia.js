@@ -43,12 +43,12 @@ var game = {
     // QUESTIONS
     // ===========================================================================
     quiz: {
-        "name": "Landmark Quiz",
-        "description": "Do you know these famous landmarks?",
-        "question": "What is the name of this landmark?",
+        "title": "Landmarks",
+        "subtitle": "AROUND THE WORLD",
+        "question": "Can you name this landmark?",
         "questions": [
             { "src": "assets/images/statue-of-liberty.jpg", "answer": "Statue of Liberty", "photo credit:": "Yvan Musy", "asked": false },
-            { "src": "assets/images/eiffel-tower.jpg", "answer": "Eiffel Tower", "photo credit:": "Anthony Delanoix", "asked": false },
+            { "src": "assets/images/eiffel-tower.jpg", "answer": "Eiffel Tower", "photo credit:": "Carissa Gan", "asked": false },
             { "src": "assets/images/gherkin.jpg", "answer": "Gherkin", "photo credit": "Ed Robertson", "asked": false },
             { "src": "assets/images/taj-mahal.jpg", "answer": "Taj Mahal", "photo credit": "Fahrul Azmi", "asked": false },
             { "src": "assets/images/st-basils-cathedral.jpg", "answer": "St. Basil's Cathedral", "photo credit": "Nikolay Vorobyev", "asked": false },
@@ -70,6 +70,7 @@ var game = {
         // prevent new intervals from being created 
         // and existing intervals from becoming orphaned
         this.playBtnElem.hide();
+        this.msgElem.empty();
         //empty all elements so that we can start a new game
         //reset all the this.quiz.questions.asked flags
         this.quiz.questions.forEach(function (question) {
@@ -179,7 +180,7 @@ var game = {
         if (DEBUG) console.log("Inside askQuestion");
         if (DEBUG) console.log(this.currentQuestion);
 
-        var elemContent = this.quiz.question + "?";
+        var elemContent = this.quiz.question;
         this.display(this.questionElem.empty(), elemContent);
         this.displayImg(this.imageElem, this.currentQuestion.src, "quizImg");
 
@@ -199,23 +200,23 @@ var game = {
         if (DEBUG) console.log("OPTIONS", options);
 
         this.answerElem.empty();
-        //using bind to get access to this.answerElem works, but seems crazy
 
-        options.forEach( function (name) {
-            var button = document.createElement("button");
-            button.value = name;
-            button.textContent = name;
-            this.answerElem.append(button);
-        }.bind(this));
+        //using bind to get access to this.answerElem works, but seems crazy
+        // options.forEach( function (name) {
+        //     var button = document.createElement("button");
+        //     button.value = name;
+        //     button.textContent = name;
+        //     this.answerElem.append(button);
+        // }.bind(this));
 
         // this.answerElem is available in the for loop
         // so no closure
-        // for (var i = 0; i < options.length; i++) {
-        //     var button = document.createElement("button");
-        //     button.value = options[i];
-        //     button.textContent = options[i];
-        //     this.answerElem.append(button);
-        // }
+        for (var i = 0; i < options.length; i++) {
+            var button = document.createElement("button");
+            button.value = options[i];
+            button.textContent = options[i];
+            this.answerElem.append(button);
+        }
 
 
     },
@@ -253,7 +254,7 @@ var game = {
             if (DEBUG) console.log("checkAnswer() userAnswer " + event.target.value);
             if (DEBUG) console.log("checkAnswer() this.currentQuestion.answer " + this.currentQuestion.answer);
         } else {
-            this.msgElem.text("No more Time", "wrong");
+            this.msgElem.text("Time's Up!", "timesup");
         }
         this.qCycle();
     },
@@ -266,7 +267,6 @@ var game = {
     },
 
     // ==============================================================================
-    // @todo Do I really need this?
     display: function (elem, elemContent, elemClass) {
         elem.html = "";
         var pElem = document.createElement("p");
@@ -293,15 +293,18 @@ var game = {
 
         if (DEBUG) console.log("gameOver() called");
 
-        // @todo clear the display
+        
         // and display some game over image
         if (this.score === 10) {
-            answerElem.empty();
+            this.answerElem.empty();
+        } else {
+            this.answerElem.empty();
         }
         clearInterval(interval);
         clearInterval(qinterval);
 
         // display the start button so player can play again
+        this.playBtnElem.text("PLAY AGAIN");
         this.playBtnElem.show();
     }
 }
@@ -313,6 +316,10 @@ var game = {
 //      Starting the Game 
 //      Selecting an Answer
 // ==============================================================================
+window.onload = function () {
+    $("h1").text(game.quiz.title);
+    $("h2").text(game.quiz.subtitle);
+};
 $("#start-btn").on("click", function () { game.play(); });
 $("#view-answers").on("click", function () { game.checkAnswer(); });
 
