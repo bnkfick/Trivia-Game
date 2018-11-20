@@ -21,7 +21,7 @@ body {
     border-top-right-radius: 5px; */
 }
 
-.column {
+.column, .fixed-column {
     width: 50%;
     float: left;
 }
@@ -117,7 +117,16 @@ button {
     body {
         background-color: lightgreen;
     } 
-    
+    h1, h2 { 
+        text-align: center;
+    }
+
+    #view-qtimer, 
+    #view-score {
+        width: 175px;
+        padding: 20px;
+        margin: 5px auto;
+    }
     .content-wrapper {
         width: 100%;
         max-width: 100%;

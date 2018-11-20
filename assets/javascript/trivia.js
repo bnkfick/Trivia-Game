@@ -7,7 +7,7 @@ var DEBUG = false;
 // A single quiz TIMER for the moment
 // @todo replace this with a timer for each question 
 // ==============================================================================
-var interval;   // game timer
+//var interval;   // game timer
 var qinterval;  // question timer
 
 
@@ -82,11 +82,12 @@ var game = {
         //@todo make a timer for each question
         this.resetQTimer();
 
+        //==========================================================================
         //reset Game timer
-        clearInterval(interval);
-        game.time = 121;
+        //clearInterval(interval);
+        //game.time = 121;
         // set up an interval that counts down every second
-        interval = setInterval(game.countDown, 1000);
+        //interval = setInterval(game.countDown, 1000);
     },
 
     // ==============================================================================
@@ -179,7 +180,7 @@ var game = {
 
         if (DEBUG) console.log("Inside askQuestion");
         if (DEBUG) console.log(this.currentQuestion);
-
+        this.msgElem.empty();
         var elemContent = this.quiz.question;
         this.display(this.questionElem.empty(), elemContent);
         this.displayImg(this.imageElem, this.currentQuestion.src, "quizImg");
@@ -239,24 +240,37 @@ var game = {
         return option;
     },
 
+    // @todo display correct answer and
+    // wait one second to move on
     checkAnswer: function () {
 
-        this.resetQTimer();
+        
         //if time ran up then there is not a user answer        
         if (event) {
+            var msg;
             if (event.target.value === game.currentQuestion.answer) {
-                this.msgElem.text("Correct!", "correct");
+                msg = "Correct!";
                 this.score++;
                 this.updateScore();
             } else {
-                this.msgElem.text("Wrong!", "wrong");
+                msg = "Wrong! " + this.currentQuestion.answer;
             }
             if (DEBUG) console.log("checkAnswer() userAnswer " + event.target.value);
             if (DEBUG) console.log("checkAnswer() this.currentQuestion.answer " + this.currentQuestion.answer);
         } else {
-            this.msgElem.text("Time's Up!", "timesup");
+            msg = "Time's Up! "  + this.currentQuestion.answer;
         }
-        this.qCycle();
+        this.questionElem.empty();
+        this.msgElem.text(msg);
+        clearInterval(qinterval);
+        setTimeout(function () {
+            game.resetQTimer();
+            game.qCycle();
+          }, 2000);
+    },
+
+    displayAnswer: function (msg) {
+        game.msgElem.text(msg);
     },
 
     displayImg: function (elem, elemContent, elemClass) {
@@ -295,14 +309,23 @@ var game = {
 
         
         // and display some game over image
-        if (this.score === 10) {
-            this.answerElem.empty();
-        } else {
-            this.answerElem.empty();
-        }
-        clearInterval(interval);
-        clearInterval(qinterval);
 
+        this.answerElem.empty();
+        
+        //clearInterval(interval);
+        clearInterval(qinterval);
+        this.questionElem.empty();
+        this.msgElem.empty();
+        this.msgElem.append("<p>CORRECT ANSWERS: " + this.score + "</p>");
+        this.msgElem.append("<p>WRONG ANSWERS: " + (parseInt(this.quiz.questions.length) - parseInt(this.score)) + "</p>");
+        this.msgElem.append("<p>CLICK TO START</p>");
+        // if (this.score === 10) {
+        //     this.msgElem.text("WOW!  You must be a world traveler.");
+        // } else if (this.score === 0) {
+        //     this.msgElem.text("Play again!");
+        // } else {
+            
+        // }
         // display the start button so player can play again
         this.playBtnElem.text("PLAY AGAIN");
         this.playBtnElem.show();
