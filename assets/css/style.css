@@ -4,6 +4,9 @@
   
 body {
     background-image: url("../../assets/images/computer.jpg"); 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
     font-family: 'Montserrat', sans-serif;
     font-size: 18px;
     line-height: 22px;
@@ -12,7 +15,7 @@ body {
 }
 
 .content-wrapper {
-    max-width: 900px;
+    max-width: 850px;
     margin: 100px auto;
     text-align: center;
     border:1px solid #0F224E;
@@ -123,7 +126,7 @@ button {
 
     #view-qtimer, 
     #view-score {
-        width: 175px;
+        width: 190px;
         padding: 20px;
         margin: 5px auto;
     }

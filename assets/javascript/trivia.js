@@ -249,7 +249,7 @@ var game = {
         if (event) {
             var msg;
             if (event.target.value === game.currentQuestion.answer) {
-                msg = "Correct!";
+                msg = "Correct! " + this.currentQuestion.answer;
                 this.score++;
                 this.updateScore();
             } else {
@@ -261,16 +261,13 @@ var game = {
             msg = "Time's Up! "  + this.currentQuestion.answer;
         }
         this.questionElem.empty();
-        this.msgElem.text(msg);
+        this.display(this.msgElem.empty(), msg);
+
         clearInterval(qinterval);
         setTimeout(function () {
             game.resetQTimer();
             game.qCycle();
           }, 2000);
-    },
-
-    displayAnswer: function (msg) {
-        game.msgElem.text(msg);
     },
 
     displayImg: function (elem, elemContent, elemClass) {
