@@ -10,6 +10,7 @@ var DEBUG = false;
 //var interval;   // game timer
 var qinterval;  // question timer
 
+var canClick = true;
 
 // ==============================================================================
 // The GAME OBJECT 
@@ -65,7 +66,6 @@ var game = {
     // ==============================================================================
     newGame: function () {
 
-        this.msgElem.html(this.quiz.name);
         // remove the start button from view
         // prevent new intervals from being created 
         // and existing intervals from becoming orphaned
@@ -218,8 +218,9 @@ var game = {
             button.textContent = options[i];
             this.answerElem.append(button);
         }
-
-
+        canClick = true;
+        console.log("canClick " + canClick);
+        
     },
 
 
@@ -262,8 +263,9 @@ var game = {
         }
         this.questionElem.empty();
         this.display(this.msgElem.empty(), msg);
-
         clearInterval(qinterval);
+        canClick = false;
+        console.log("canClick " + canClick);
         setTimeout(function () {
             game.resetQTimer();
             game.qCycle();
@@ -341,7 +343,7 @@ window.onload = function () {
     $("h2").text(game.quiz.subtitle);
 };
 $("#start-btn").on("click", function () { game.play(); });
-$("#view-answers").on("click", function () { game.checkAnswer(); });
+$("#view-answers").on("click", function () { if (canClick) game.checkAnswer(); });
 
 
 
