@@ -10,6 +10,18 @@ body {
     background-color:#F7F6F2;
 }
 
+.content-wrapper {
+    margin: 0 auto;
+    padding-left: 50px;
+    text-align: center;
+}
+.column {
+    width: 50%;
+    float: left;
+}
+h1 {
+    color:  #0F224E;
+}
 button {
     background-color: #0F224E;
     color:#F7F6F2;
@@ -22,4 +34,65 @@ button {
 .quizImg {
     max-height: 400px;
     max-width: 400px;
+    padding:2px;
+    border:1px solid #0F224E;
+    background-color:lightgray;
+}
+
+/* -- lightgoldenrodyellow if the viewport is between 768px and 980px wide -- */
+@media screen and (max-width: 980px) {
+    body {
+        background-color: lightgoldenrodyellow;
+    } 
+    .column {
+        width: 50%;
+    }
+    .content-wrapper {
+        margin: 0 auto;
+        padding-left: 50px;
+    }
+
+}
+
+/* -- lavender if the viewport is between 640px and 768px wide -- */
+@media screen and (max-width: 768px)  {
+    body {
+        background-color: lavender;
+    } 
+    .content-wrapper
+    {
+        padding-top: 0;
+        padding-left: 15px;
+        margin: 0;
+    }
+}
+
+/* -- lightgreen if the viewport is less than 640px wide -- */
+@media screen and (max-width: 640px) {
+    body {
+        background-color: lightgreen;
+    } 
+    
+    .content-wrapper {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 0;
+    }
+    .column {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+    }
+}
+
+/* -- lightgrey if the viewport is less than 640px wide -- */
+@media screen and (max-width: 300px) {
+    body {
+        background-color: lightgrey; 
+    } 
+
+    .content-box {
+       min-width: 266px;
+    }
+   
 }
