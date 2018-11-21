@@ -12,16 +12,20 @@ body {
     line-height: 22px;
     color: #777777;
     background-color:#F7F6F2;
+    filter: blur(.5px);
 }
 
 .content-wrapper {
-    max-width: 850px;
-    margin: 100px auto;
+    max-width: 700px;
+    margin: 50px auto;
     text-align: center;
     border:1px solid #0F224E;
-    background-color:lightgray;
-    /* border-top-left-radius: 5px;
-    border-top-right-radius: 5px; */
+    background-color:whitesmoke;
+    /*text-shadow: 1px 1px 1px black;
+    box-shadow: -2px -1px 1px #eee;*/
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    filter: alpha(Opacity=50%);
 }
 
 .column, .fixed-column {
@@ -33,11 +37,16 @@ body {
     border-bottom: 1px solid #0F224E;
     
 }
-h1, h2 { 
+h1 { 
+    font-size: 48px;
+    text-shadow: 1px 1px 2px black;
     color:  #0F224E;
 }
 h2 { 
-    padding-left: 25px;
+    font-weight:bold;
+    font-size: 42px;
+    text-shadow: 1px 1px 2px black;
+    text-align:center;
     color:  #0F224E;
 }
 
@@ -46,6 +55,7 @@ button {
     background-color: #0F224E;
     color:#F7F6F2;
     border:1px solid black;
+    text-shadow: 1px 1px 12px black;
     display: block;
     width: 300px;
     padding: 20px;
@@ -53,8 +63,30 @@ button {
     font-size: 16px;
 }
 
+.center {
+    margin: auto;
+    width: 50%;
+    border: 1px solid green;
+}
+
 #view-qtimer, 
-#view-score {
+#view-score
+{
+    background-color: white;
+    color:#0F224E;
+    border:1px solid black;
+    display: block;
+    width: 190px;
+    padding: 20px;
+    margin: 15px auto;
+    font-size: 16px;
+    /* border-radius: 5px; */
+}
+ 
+#view-caption {
+    height: 30px;
+}
+#description {
     background-color: white;
     color:#0F224E;
     border:1px solid black;
@@ -63,20 +95,21 @@ button {
     padding: 20px;
     margin: 15px auto;
     font-size: 16px;
-    /* border-radius: 5px; */
+    border-radius: 5px;
 }
 #view-message {
     color:#0F224E;
 }
 #view-image {
     height: 400px;
+    text-align: center;
     margin: 0 auto;
     margin-bottom: 50px;
 }
 
 .quizImg {
     max-height: 400px;
-    max-width: 400px;
+    width: 300px;
     padding:2px;
     border:1px solid #0F224E;
     background-color:lightgray;
@@ -126,10 +159,11 @@ button {
 
     #view-qtimer, 
     #view-score {
-        width: 190px;
+        width: 150px;
         padding: 20px;
         margin: 5px auto;
     }
+
     .content-wrapper {
         width: 100%;
         max-width: 100%;

@@ -2,42 +2,42 @@
 <html lang="en-us">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Trivia Game</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
+    
     <!-- Added link to the jQuery library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+ 
 
 </head>
 
 <body>
-    <div class="title">
-        <h1></h1>
-    </div>
-    <div>
-        <h2></h2>
-    </div>
+        <div class="title"><h1></h1></div>
+        <div><h2></h2></div>
     <div class="content-wrapper clearfix">
-
+<div class="center">
         <div class="fixed-column">
             <div id="view-qtimer">TIMER</div>
         </div>
         <div class="fixed-column">
             <div id="view-score">SCORE</div>
         </div>
-
+    </div>
 
         <div class="column" id="view-image"><img class="quizImg" src="assets/images/globe.jpg"></div>
         <div class="column">
-
-            <div id="view-message">CLICK TO START</div>
+            
+            <div id="view-message"><span id="description">How many of these famous landmarks can you name?</span>CLICK TO START
+                
+            </div>
             <!-- <p id="view-timer">GAME TIMER HERE</div> -->
             <div id="view-question"></div>
+            <div id="view-caption"></div>
             <div id="view-answers"></div>
+
             <div class="play">
                 <button type="button" id="start-btn">PLAY</button>
             </div>
@@ -46,5 +46,4 @@
     </div>
 </body>
 <script type="text/javascript" src="assets/javascript/trivia.js"></script>
-
 </html>

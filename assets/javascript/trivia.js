@@ -32,10 +32,11 @@ var game = {
     questionElem: $("#view-question"),
     imageElem: $("#view-image"),
     answerElem: $("#view-answers"),
+    captionElem: $("#view-caption"),
 
 
     time: 121,          // Start the game with a 2 minute timer
-    qtime: 10,
+    qtime: 5,
     score: 0,           // We start the game with a score of 0.
     currentQuestion: '',
 
@@ -46,18 +47,19 @@ var game = {
     quiz: {
         "title": "Landmarks",
         "subtitle": "AROUND THE WORLD",
-        "question": "Can you name this landmark?",
+        "description": "How many of these famous landmarks can you name?",
+        "question": "What is this landmark?",
         "questions": [
-            { "src": "assets/images/statue-of-liberty.jpg", "answer": "Statue of Liberty", "photo credit:": "Yvan Musy", "asked": false },
-            { "src": "assets/images/eiffel-tower.jpg", "answer": "Eiffel Tower", "photo credit:": "Carissa Gan", "asked": false },
-            { "src": "assets/images/gherkin.jpg", "answer": "Gherkin", "photo credit": "Ed Robertson", "asked": false },
-            { "src": "assets/images/taj-mahal.jpg", "answer": "Taj Mahal", "photo credit": "Fahrul Azmi", "asked": false },
-            { "src": "assets/images/st-basils-cathedral.jpg", "answer": "St. Basil's Cathedral", "photo credit": "Nikolay Vorobyev", "asked": false },
-            { "src": "assets/images/petronas-towers.jpg", "answer": "Petronas Twin Towers", "photo credit:": "Alex Block", "asked": false },
-            { "src": "assets/images/machu-picchu.jpg", "answer": "Machu Picchu", "photo credit:": "Abraham Osorio", "asked": false },
-            { "src": "assets/images/great-wall-china.jpg", "answer": "Great Wall of China", "photo credit": "Violette Filippini", "asked": false },
-            { "src": "assets/images/pyramids.jpg", "answer": "Egyptian Pyramids", "photo credit": "Jeremy Bishop", "asked": false },
-            { "src": "assets/images/opera-house.jpg", "answer": "Sydney Opera House", "photo credit": "Holger Link", "asked": false }
+            { "src": "assets/images/statue-of-liberty.jpg", "answer": "Statue of Liberty", "location": "NYC, US", "photo credit:": "Julius Drost", "asked": false },
+            { "src": "assets/images/eiffel-tower.jpg", "answer": "Eiffel Tower", "location": "Paris, France",  "photo credit:": "Carissa Gan", "asked": false },
+            { "src": "assets/images/gherkin.jpg", "answer": "Gherkin",  "location": "London, England", "photo credit": "Ed Robertson", "asked": false },
+            { "src": "assets/images/taj-mahal.jpg", "answer": "Taj Mahal",  "location": "Agra, India", "photo credit": "Fahrul Azmi", "asked": false },
+            { "src": "assets/images/st-basils-cathedral.jpg", "answer": "St. Basil's Cathedral",  "location": "Moscow, Russia", "photo credit": "Nikolay Vorobyev", "asked": false },
+            { "src": "assets/images/petronas-towers.jpg", "answer": "Petronas Twin Towers",  "location": "Kuala Lampur, Malaysia", "photo credit:": "Alex Block", "asked": false },
+            { "src": "assets/images/machu-picchu.jpg", "answer": "Machu Picchu",  "location": "Peru", "photo credit:": "Abraham Osorio", "asked": false },
+            { "src": "assets/images/pyramids.jpg", "answer": "The Pyramids",  "location": "Giza, Egypt", "photo credit": "Martin Widenka", "asked": false },
+            { "src": "assets/images/opera-house.jpg", "answer": "Sydney Opera House",  "location": "Sydney, Australia", "photo credit": "Holger Link", "asked": false },
+            { "src": "assets/images/burj-al-arab.jpg", "answer": "Burj Al Arab",  "location": "Dubai, United Arab Emirates", "photo credit": "HSylvia Prats", "asked": false },
         ]
     },
 
@@ -123,8 +125,8 @@ var game = {
     // Reset the Question Timer in a function
     // ==============================================================================
     resetQTimer: function () {
-        game.qtime = 10;
-        game.QtimerElem.text("Time: " + game.qtime);
+        game.qtime = 5;
+        game.QtimerElem.text("Time: " + ("0" + game.qtime).slice(-2));
         clearInterval(qinterval);
         qinterval = setInterval(game.qcountDown, 1000);
     },
@@ -201,6 +203,7 @@ var game = {
         if (DEBUG) console.log("OPTIONS", options);
 
         this.answerElem.empty();
+        this.captionElem.empty();
 
         //using bind to get access to this.answerElem works, but seems crazy
         // options.forEach( function (name) {
@@ -262,6 +265,7 @@ var game = {
         }
         this.questionElem.empty();
         this.display(this.msgElem.empty(), msg);
+        this.captionElem.text(this.currentQuestion.location);
         clearInterval(qinterval);
         canClick = false;
 
@@ -317,13 +321,10 @@ var game = {
         this.msgElem.append("<p>CORRECT ANSWERS: " + this.score + "</p>");
         this.msgElem.append("<p>WRONG ANSWERS: " + (parseInt(this.quiz.questions.length) - parseInt(this.score)) + "</p>");
         this.msgElem.append("<p>CLICK TO START</p>");
-        // if (this.score === 10) {
-        //     this.msgElem.text("WOW!  You must be a world traveler.");
-        // } else if (this.score === 0) {
-        //     this.msgElem.text("Play again!");
-        // } else {
-            
-        // }
+        this.msgElem.append("<span id='description'>" + game.quiz.description + "</span>");
+        this.displayImg(this.imageElem, 'assets/images/globe.jpg', "quizImg");
+        this.captionElem.empty();
+
         // display the start button so player can play again
         this.playBtnElem.text("PLAY AGAIN");
         this.playBtnElem.show();
@@ -340,6 +341,7 @@ var game = {
 window.onload = function () {
     $("h1").text(game.quiz.title);
     $("h2").text(game.quiz.subtitle);
+    $("#description").text(game.quiz.description);
 };
 $("#start-btn").on("click", function () { game.play(); });
 $("#view-answers").on("click", function () { if (canClick) game.checkAnswer(); });
