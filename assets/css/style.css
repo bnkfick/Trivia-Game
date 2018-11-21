@@ -12,7 +12,6 @@ body {
     line-height: 22px;
     color: #777777;
     background-color:#F7F6F2;
-    filter: blur(.5px);
 }
 
 .content-wrapper {
@@ -25,7 +24,7 @@ body {
     box-shadow: -2px -1px 1px #eee;*/
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    filter: alpha(Opacity=50%);
+    border: 1px solid darkslategray;
 }
 
 .column, .fixed-column {
@@ -35,7 +34,6 @@ body {
 
 .title {
     border-bottom: 1px solid #0F224E;
-    
 }
 h1 { 
     font-size: 48px;
@@ -66,7 +64,7 @@ button {
 .center {
     margin: auto;
     width: 50%;
-    border: 1px solid green;
+    border-bottom: 3px solid green;
 }
 
 #view-qtimer, 
@@ -77,7 +75,7 @@ button {
     border:1px solid black;
     display: block;
     width: 190px;
-    padding: 20px;
+    padding: 10px;
     margin: 15px auto;
     font-size: 16px;
     /* border-radius: 5px; */
@@ -111,6 +109,7 @@ button {
     max-height: 400px;
     width: 300px;
     padding:2px;
+
     border:1px solid #0F224E;
     background-color:lightgray;
 }
@@ -123,9 +122,9 @@ button {
 
 /* -- lightgoldenrodyellow if the viewport is between 768px and 980px wide -- */
 @media screen and (max-width: 980px) {
-    body {
+    /* body {
         background-color: lightgoldenrodyellow;
-    } 
+    }  */
     .column {
         width: 50%;
     }
@@ -137,53 +136,70 @@ button {
 
 /* -- lavender if the viewport is between 640px and 768px wide -- */
 @media screen and (max-width: 768px)  {
-    body {
+    /* body {
         background-color: lavender;
-    } 
-    .content-wrapper
-    {
-        padding-top: 0;
-        padding-left: 15px;
-        margin: 0;
+    }  */
+    .center {
+        width: 60%;
     }
 }
 
 /* -- lightgreen if the viewport is less than 640px wide -- */
 @media screen and (max-width: 640px) {
-    body {
+    /* body {
         background-color: lightgreen;
-    } 
+    }  */
     h1, h2 { 
         text-align: center;
+        font-size: 28px;
     }
-
+    
     #view-qtimer, 
     #view-score {
-        width: 150px;
-        padding: 20px;
+        width: 175px;
         margin: 5px auto;
-    }
-
-    .content-wrapper {
-        width: 100%;
-        max-width: 100%;
-        padding-left: 0;
     }
     .column {
         width: 100%;
         margin: 0 auto;
         text-align: center;
     }
+    .center {
+        width: 70%;
+    }
 }
 
+@media screen and (max-width: 550px) {
+    .center {
+        width: 80%;
+    }
+}
+@media screen and (max-width: 440px) {
+    body {
+        margin: 0;
+    }
+    .content-wrapper {
+        min-width: 350px;
+     }
+    .center {
+        width: 90%;
+    }
+}
 /* -- lightgrey if the viewport is less than 640px wide -- */
 @media screen and (max-width: 300px) {
-    body {
+    /* body {
         background-color: lightgrey; 
-    } 
-
-    .content-box {
-       min-width: 266px;
+    }  */
+    h1, h2 { 
+        font-size: 20px;
+    }
+    #view-qtimer, 
+    #view-score {
+        width: 150px;
+        margin: 5px auto;
+    }
+    .center {
+        width: 90%;
     }
    
 }
