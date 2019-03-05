@@ -20,8 +20,9 @@ body {
     text-align: center;
     border:1px solid #0F224E;
     background-color:whitesmoke;
-    /*text-shadow: 1px 1px 1px black;
-    box-shadow: -2px -1px 1px #eee;*/
+    background-color: rgba(255, 255, 255, 0.85); /* Black w/opacity/see-through */
+    /*text-shadow: 1px 1px 1px black;*/
+    /*box-shadow: -2px -1px 1px #eee;*/
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border: 1px solid darkslategray;
@@ -74,7 +75,7 @@ button {
     color:#0F224E;
     border:1px solid black;
     display: block;
-    width: 190px;
+    /* width: 190px; */
     padding: 10px;
     margin: 15px auto;
     font-size: 16px;

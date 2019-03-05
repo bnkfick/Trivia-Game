@@ -247,7 +247,6 @@ var game = {
     // wait one second to move on
     checkAnswer: function () {
 
-        
         //if time ran up then there is not a user answer        
         if (event) {
             var msg;
